@@ -1,5 +1,5 @@
 *.py[cod]
-./vscode
+.vscode/
 
 # C extensions
 *.so
