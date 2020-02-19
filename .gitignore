@@ -1,5 +1,6 @@
 *.py[cod]
 .vscode/
+.devcontainer
 
 # C extensions
 *.so
