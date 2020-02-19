@@ -1,15 +1,19 @@
-FROM ubuntu:bionic
+# Builder
+FROM python:3.7.2-alpine AS flask
 
-RUN apt-get update && apt-get install \
-  -y --no-install-recommends python3 python3-virtualenv
+RUN apk add --update --no-cache \
+    python \
+    make \
+    g++
 
-RUN python3 -m virtualenv --python=/usr/bin/python3 /opt/venv
-
-# Install dependencies:
-COPY ./requirements.txt /app/requirements.txt
 WORKDIR /app
-RUN . /opt/venv/bin/activate && pip install -r requirements.txt
+ADD . /app
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Run the application:
-COPY . /app
-CMD . /opt/venv/bin/activate && exec python manage.py runserver --host=0.0.0.0
+CMD ["gunicorn", "--bind", ":5000" , "manage:app"]
+
+# Runtime
+FROM nginx:1.17.4-alpine AS nginx
+
+ADD nginx.conf /etc/nginx/conf.d/default.conf
+
