@@ -2,15 +2,25 @@ version: '3.7'
 
 services:
     web:
+        restart: always
         build:
             context: ./
             target: flask
+        volumes:
+            - .:/home/app/src
+            - static_volume:/home/src/app/templates
         expose:
-            - 5000
+            - 6000
+        command: gunicorn --bind 0.0.0.0:6000 manage:app
 
     nginx:
+        restart: always
         build:
             context: ./
             target: nginx
         ports:
-            - 3000:80
+            - 1337:80
+        depends_on:
+            - web
+volumes:
+    static_volume:

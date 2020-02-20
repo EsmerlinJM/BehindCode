@@ -1,19 +1,21 @@
 # Builder
 FROM python:3.7.2-alpine AS flask
 
+# Install and update dependencies for g++
 RUN apk add --update --no-cache \
-    python \
-    make \
     g++
 
-WORKDIR /app
-ADD . /app
-RUN pip install --no-cache-dir -r requirements.txt
+# Create workdir
+WORKDIR /home/app/src
+ADD . /home/app/src
 
-CMD ["gunicorn", "--bind", ":5000" , "manage:app"]
+# Add, update and install dependencies
+COPY requirements.txt /tmp/
+RUN pip install --upgrade pip
+# RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r /tmp/requirements.txt
+COPY . /tmp/
 
 # Runtime
 FROM nginx:1.17.4-alpine AS nginx
-
 ADD nginx.conf /etc/nginx/conf.d/default.conf
-
