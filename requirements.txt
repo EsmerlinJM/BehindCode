@@ -17,7 +17,7 @@ itsdangerous==0.24
 Jinja2==2.10
 lazy-object-proxy==1.4.1
 Mako==1.0.7
-MarkupSafe==1.0
+MarkupSafe==1.1.1
 mccabe==0.6.1
 pylint==2.3.1
 python-dateutil==2.6.1
